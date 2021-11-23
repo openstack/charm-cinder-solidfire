@@ -1,0 +1,9 @@
+charm_name: cinder-solidfire
+tests:
+  - tests.tests_cinder_solidfire.CinderSolidfireTest
+configure:
+  - zaza.openstack.charm_tests.keystone.setup.add_demo_user
+gate_bundles:
+  - bionic-queens
+smoke_bundles:
+  - bionic-queens

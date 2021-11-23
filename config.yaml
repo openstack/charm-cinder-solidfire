@@ -1,0 +1,5 @@
+options:
+  volume-dd-blocksize:
+    default: 1024
+    description: Disk block size for the volume
+    type: int
