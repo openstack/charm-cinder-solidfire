@@ -1,5 +1,77 @@
 options:
-  volume-dd-blocksize:
-    default: 1024
-    description: Disk block size for the volume
+  volume-backend-name:
+    type: string
+    default: cinder_solidfire
+    description: Service name to present to Cinder
+  san-ip:
+    type: string
+    default: !!null ""
+    description: IP address of SAN controller
+  san-login:
+    type: string
+    default: sfadmin
+    description: Username for SAN controller
+  san-password:
+    type: string
+    default: sfpassword
+    description: Password for SAN controller
+  sf-account-prefix:
+    type: string
+    default: !!null ""
+    description: |
+        Create SolidFire accounts with this prefix. Any string can be used
+        here, but the string “hostname” is special and will create a prefix
+        using the cinder node hostname (previous default behavior). 
+        The default is NO prefix.
+  sf-allow-template-caching:
+    type: boolean
+    default: !!bool "true"
+    description: |
+        Create an internal cache of copy of images when a bootable volume is
+        created to eliminate fetch from glance and qemu-conversion on
+        subsequent calls.
+  sf-allow-tenant-qos:
+    type: boolean
+    default: !!bool "false"
+    description: Allow tenants to specify QOS on create
+  sf-api-port:
     type: int
+    default: 443
+    description: |
+        SolidFire API port. Useful if the device api is behind a proxy on
+        a different port.
+  sf-emulate-512:
+    type: boolean
+    default: !!bool "true"
+    description: Set 512 byte emulation on volume creation
+  sf-enable-vag:
+    type: boolean
+    default: !!bool "false"
+    description: Utilize volume access groups on a per-tenant basis.
+  sf-enable-volume-mapping:
+    type: boolean
+    default: !!bool "true"
+    description: |
+        Create an internal mapping of volume IDs and account. Optimizes lookups
+        and performance at the expense of memory, very large deployments may
+        want to consider setting to False.
+  sf-svip:
+    type: string
+    default: !!null ""
+    description: |
+        Overrides default cluster SVIP with the one specified. This is required
+        or deployments that have implemented the use of VLANs for iSCSI
+        networks in their cloud.
+  sf-template-account-name:
+    type: string
+    default: openstack-vtemplate
+    description: |
+        Account name on the SolidFire Cluster to use as owner of template/cache
+        volumes (created if does not exist).
+  sf-volume-prefix:
+    type: string
+    default: UUID
+    description: |
+        Create SolidFire volumes with this prefix. Volume names are of the form
+        <sf_volume_prefix><cinder-volume-id>.
+        The default is to use a prefix of ‘UUID-‘.

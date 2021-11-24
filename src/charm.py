@@ -16,12 +16,19 @@
 
 
 import json
+import uuid
+import logging
 
-
+from ops.charm import (ConfigChangedEvent, InstallEvent, RelationChangedEvent,
+                       UpdateStatusEvent)
 from ops_openstack.core import OSBaseCharm
 from ops.framework import StoredState
 from ops.main import main
-from ops.model import ActiveStatus
+from ops.model import ActiveStatus, WaitingStatus
+
+logger = logging.getLogger(__name__)
+
+VOLUME_DRIVER = 'cinder.volume.drivers.solidfire.SolidFireDriver'
 
 
 class CinderSolidfireCharm(OSBaseCharm):
@@ -31,58 +38,69 @@ class CinderSolidfireCharm(OSBaseCharm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # We listen to the following events:
-        # - Installation: Just to set the charm status
-        # - Configuration changes: Rewrite the cinder.conf file and inform
-        #   other charms of the changes
-        # - Backend storage join/change: Inform the other charm of what the
-        #   configuration is and the backend name.
         self.framework.observe(self.on.install, self._on_install)
-        self.framework.observe(self.on.config_changed, self._on_config)
-        self.framework.observe(
-            self.on.storage_backend_relation_joined,
-            self._on_storage_backend)
+        self.framework.observe(self.on.update_status, self._on_update_status)
+        self.framework.observe(self.on.config_changed, self._on_config_changed)
         self.framework.observe(
             self.on.storage_backend_relation_changed,
-            self._on_storage_backend)
+            self._on_storage_backend_changed)
 
-    def _on_install(self, _):
+    # @observed
+    def _on_install(self, event: InstallEvent):
         self.install_pkgs()
         self.unit.status = ActiveStatus('Unit is ready')
 
-    def _render_config(self, config, app_name):
-        # Generate the JSON with the updated configuration.
-        volume_driver = ''
+    # @observed
+    def _on_update_status(self, event: UpdateStatusEvent):
+        expected_status = WaitingStatus('Charm configuration in progress')
+        if (self.unit.status == expected_status):
+            self.unit.status = ActiveStatus('Unit is ready')
+
+    # @observed
+    def _on_config_changed(self, event: ConfigChangedEvent):
+        for relation in self.framework.model.relations.get('storage-backend'):
+            self._set_relation_data(relation.data[self.unit])
+        self.unit.status = ActiveStatus('Unit is ready')
+
+    # @observed
+    def _on_storage_backend_changed(self, event: RelationChangedEvent):
+        self._set_relation_data(event.relation.data[self.unit])
+
+    def _set_relation_data(self, data) -> None:
+        backend_name = self.model.config['volume-backend-name']
+        data['backend-name'] = backend_name
+        data['subordinate_configuration'] = self._render_config(backend_name)
+
+    def _render_config(self, backend_name) -> str:
+        cget = self.model.config.get
+
+        sf_volume_prefix = str(uuid.uuid4()) if cget(
+            'sf-volume-prefix') == "UUID" else cget('sf-volume-prefix')
+
         options = [
-            ('volume_driver', volume_driver),
+            ('volume_driver', VOLUME_DRIVER),
+            ('san_ip', cget('san-ip')),
+            ('san_login', cget('san-login')),
+            ('san_password', cget('san-password')),
+            ('sf_account_prefix', cget('sf-account-prefix')),
+            ('sf_allow_template_caching',
+                cget('sf-allow-template-caching')),
+            ('sf_allow_tenant_qos', cget('sf-allow-tenant-qos')),
+            ('sf_api_port', cget('sf-api-port')),
+            ('sf_emulate_512', cget('sf-emulate-512')),
+            ('sf_enable_vag', cget('sf-enable-vag')),
+            ('sf_enable_volume_mapping', cget('sf-enable-volume-mapping')),
+            ('sf_svip', cget('sf-svip')),
+            ('sf_template_account_name', cget('sf-template-account-name')),
+            ('sf_volume_prefix', sf_volume_prefix)
         ]
         return json.dumps({
             "cinder": {
-                "/etc/cinder/cinder.confg": {
-                    "sections": {app_name: options}
+                "/etc/cinder/cinder.conf": {
+                    "sections": {backend_name: options}
                 }
             }
         })
-
-    def _set_data(self, data, config, app_name):
-        # Inform another charm of the backend name and our configuration.
-        data['backend-name'] = config['volume-backend-name'] or app_name
-        data['subordinate_configuration'] = self._render_config(
-            config, app_name)
-
-    def _on_config(self, event):
-        config = dict(self.framework.model.config)
-        rel = self.framework.model.relations.get('storage-backend')[0]
-        app_name = self.framework.model.app.name
-        for unit in self.framework.model.get_relation('storage-backend').units:
-            self._set_data(rel.data[self.unit], config, app_name)
-        self.unit.status = ActiveStatus('Unit is ready')
-
-    def _on_storage_backend(self, event):
-        self._set_data(
-            event.relation.data[self.unit],
-            self.framework.model.config,
-            self.framework.model.app.name)
 
 
 if __name__ == '__main__':
