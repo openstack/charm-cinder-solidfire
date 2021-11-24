@@ -1,9 +1,14 @@
 build
-layers
+/*.charm
 .tox
+.stestr
+
+layers
 interfaces
 .testrepository
-.stestr
 *__pycache__*
 *.pyc
-/*.charm
+venv
+
+.vscode
+tests/bundles/*@dev*
