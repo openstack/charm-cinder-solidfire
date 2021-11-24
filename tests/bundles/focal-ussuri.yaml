@@ -1,0 +1,76 @@
+series: focal
+variables:
+  openstack-origin: &openstack-origin distro
+comment:
+  - machines section to decide order of deployment. database sooner = faster
+
+machines:
+  '0':
+    constraints: mem=3072M
+  '1':
+    constraints: mem=3072M
+  '2':
+    constraints: mem=3072M
+  '3':
+  '4':
+  '5':
+    constraints: mem=4G root-disk=16G
+
+applications:
+  mysql-innodb-cluster:
+    charm: cs:~openstack-charmers-next/mysql-innodb-cluster
+    num_units: 3
+    options:
+      source: *openstack-origin
+    to:
+      - '0'
+      - '1'
+      - '2'
+  rabbitmq-server:
+    charm: cs:~openstack-charmers-next/rabbitmq-server
+    num_units: 1
+    options:
+      source: *openstack-origin
+    to:
+      - '3'
+  keystone:
+    charm: cs:~openstack-charmers/keystone
+    options:
+      openstack-origin: *openstack-origin
+    num_units: 1
+    to:
+      - '4'
+  keystone-mysql-router:
+    charm: cs:~openstack-charmers-next/mysql-router
+  cinder:
+    charm: cs:~openstack-charmers-next/cinder
+    num_units: 1
+    storage:
+      block-devices: '40G'
+    options:
+      openstack-origin: *openstack-origin
+      block-device: None
+      overwrite: "true"
+    to:
+      - '5'
+  
+  # SUBORDINATES 
+  cinder-mysql-router:
+    charm: cs:~openstack-charmers-next/mysql-router
+  
+  # src charm
+  cinder-solidfire:
+    charm: cs:~gustavosr98/cinder-solidfire
+    options:
+      san-ip: 10.0.0.5
+      san-login: username 
+      san-password: password
+
+relations:
+  - [ keystone:shared-db, keystone-mysql-router:shared-db ]
+  - [ keystone-mysql-router:db-router, mysql-innodb-cluster:db-router ]
+  - [ cinder:shared-db, cinder-mysql-router:shared-db ]
+  - [ cinder-mysql-router:db-router, mysql-innodb-cluster:db-router ]
+  - [ cinder:identity-service, keystone:identity-service ]
+  - [ cinder:amqp, rabbitmq-server:amqp ]
+  - [ cinder:storage-backend, cinder-solidfire:storage-backend ]
