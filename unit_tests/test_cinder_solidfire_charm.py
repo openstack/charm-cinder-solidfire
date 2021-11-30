@@ -25,19 +25,27 @@ class TestCinderSolidfireCharm(unittest.TestCase):
         self.addCleanup(self.harness.cleanup)
         self.harness.begin()
         self.harness.set_leader(True)
-        backend = self.harness.add_relation('storage-backend', 'cinder')
-        self.harness.update_config({'volume-backend-name': 'test'})
-        self.harness.add_relation_unit(backend, 'cinder/0')
+        relation_id = self.harness.add_relation('storage-backend', 'cinder')
+        self.harness.add_relation_unit(relation_id, 'cinder/0')
 
-    def test_cinder_base(self):
+    def test_base(self):
         self.assertEqual(
             self.harness.framework.model.app.name,
             'cinder-solidfire')
-        # Test that charm is active upon installation.
         self.harness.update_config({})
         self.assertTrue(isinstance(
             self.harness.model.unit.status, ActiveStatus))
 
-    def test_cinder_configuration(self):
-        # Add check here that configuration is as expected.
-        pass
+    def test_configuration(self):
+        test_config = {
+            'volume-backend-name': 'cinder_solidfire_test',
+            'san-ip': '10.0.0.11',
+            'san-login': 'username',
+            'san-password': 'password',
+        }
+        config = self.harness.model.config
+
+        self.harness.update_config(test_config)
+
+        for k in test_config:
+            self.assertEqual(test_config[k], config[k])
