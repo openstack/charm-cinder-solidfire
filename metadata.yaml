@@ -11,7 +11,6 @@ tags:
   - misc
 series:
   - focal
-  - bionic
 subordinate: true
 provides:
   storage-backend:
