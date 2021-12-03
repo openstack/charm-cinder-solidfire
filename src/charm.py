@@ -19,14 +19,14 @@ import uuid
 import logging
 
 from ops.main import main
-from ops_openstack.plugins.classes import BaseCinderCharm
+from ops_openstack.plugins.classes import CinderStoragePluginCharm
 
 logger = logging.getLogger(__name__)
 
 VOLUME_DRIVER = 'cinder.volume.drivers.solidfire.SolidFireDriver'
 
 
-class CinderSolidfireCharm(BaseCinderCharm):
+class CinderSolidfireCharm(CinderStoragePluginCharm):
 
     PACKAGES = ['cinder-common']
     # Overriden from the parent. May be set depending on the charm's properties
