@@ -27,3 +27,7 @@ The OpenStack Charms project maintains two documentation guides:
 
 [cg]: https://docs.openstack.org/charm-guide
 [cdg]: https://docs.openstack.org/project-deploy-guide/charm-deployment-guide
+
+# Bugs
+
+Please report bugs on [Launchpad](https://bugs.launchpad.net/charm-cinder-solidfire/+filebug).
