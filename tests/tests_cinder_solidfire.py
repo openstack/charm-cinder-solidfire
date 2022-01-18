@@ -54,7 +54,8 @@ class CinderSolidfireTest(test_utils.OpenStackBaseTest):
             model_name=self.model_name,
             timeout=2)
 
-    def test_create_volume(self):
+    # Disabled while there is no hardware Solidfire appliance
+    def _disabled_test_create_volume(self):
         test_vol_name = "zaza{}".format(uuid.uuid1().fields[0])
         vol_new = self.cinder_client.volumes.create(
             name=test_vol_name,

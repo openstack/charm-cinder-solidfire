@@ -53,17 +53,15 @@ applications:
       overwrite: "true"
     to:
       - '5'
-  
-  # SUBORDINATES 
+
   cinder-mysql-router:
     charm: cs:~openstack-charmers-next/mysql-router
-  
-  # src charm
+
   cinder-solidfire:
-    charm: cs:~gustavosr98/cinder-solidfire
+    charm: ../../cinder-solidfire
     options:
       san-ip: 10.0.0.5
-      san-login: username 
+      san-login: username
       san-password: password
 
 relations:

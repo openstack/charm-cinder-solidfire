@@ -1,0 +1,9 @@
+- project:
+    templates:
+      - charm-unit-jobs
+    check:
+      jobs:
+        - focal-ussuri
+    vars:
+      needs_charm_build: true
+      charm_build_name: cinder-solidfire
