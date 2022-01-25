@@ -33,6 +33,9 @@ class CinderSolidfireCharm(CinderStoragePluginCharm):
     stateless = False
     active_active = False
 
+    mandatory_config = [
+        'san-ip', 'san-login', 'san-password']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._stored.is_started = True
@@ -43,9 +46,12 @@ class CinderSolidfireCharm(CinderStoragePluginCharm):
 
         sf_volume_prefix = str(uuid.uuid4()) if cget(
             'volume-prefix') == "UUID" else cget('volume-prefix')
+        volume_backend_name = cget(
+            'volume-backend-name') or self.framework.model.app.name
 
         raw_options = [
             ('volume_driver', VOLUME_DRIVER),
+            ('volume_backend_name', volume_backend_name),
             ('san_ip', cget('san-ip')),
             ('san_login', cget('san-login')),
             ('san_password', cget('san-password')),

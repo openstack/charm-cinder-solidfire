@@ -1,8 +1,13 @@
 options:
   volume-backend-name:
     type: string
-    default: cinder_solidfire
-    description: Service name to present to Cinder
+    description: |
+        Volume backend name for the backend. The default value is the
+        application name in the Juju model, e.g. "cinder-sf-mybackend"
+        if it's deployed as `juju deploy cinder-solidfire cinder-sf-mybackend`.
+        A common backend name can be set to multiple backends with the
+        same characters so that those can be treated as a single virtual
+        backend associated with a single volume type.
   san-ip:
     type: string
     default: !!null ""
