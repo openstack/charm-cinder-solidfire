@@ -1,9 +1,8 @@
 - project:
     templates:
-      - charm-unit-jobs
-    check:
-      jobs:
-        - focal-ussuri
+      - charm-unit-jobs-py38
+      - charm-unit-jobs-py39
     vars:
       needs_charm_build: true
       charm_build_name: cinder-solidfire
+      build_type: charmcraft

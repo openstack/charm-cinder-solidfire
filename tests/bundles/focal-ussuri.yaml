@@ -18,7 +18,8 @@ machines:
 
 applications:
   mysql-innodb-cluster:
-    charm: cs:~openstack-charmers-next/mysql-innodb-cluster
+    charm: ch:mysql-innodb-cluster
+    channel: latest/edge
     num_units: 3
     options:
       source: *openstack-origin
@@ -27,23 +28,27 @@ applications:
       - '1'
       - '2'
   rabbitmq-server:
-    charm: cs:~openstack-charmers-next/rabbitmq-server
+    charm: ch:rabbitmq-server
+    channel: latest/edge
     num_units: 1
     options:
       source: *openstack-origin
     to:
       - '3'
   keystone:
-    charm: cs:~openstack-charmers/keystone
+    charm: ch:keystone
+    channel: yoga/edge
     options:
       openstack-origin: *openstack-origin
     num_units: 1
     to:
       - '4'
   keystone-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: ch:mysql-router
+    channel: latest/edge
   cinder:
-    charm: cs:~openstack-charmers-next/cinder
+    charm: ch:cinder
+    channel: yoga/edge
     num_units: 1
     storage:
       block-devices: '40G'
@@ -55,14 +60,11 @@ applications:
       - '5'
 
   cinder-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: ch:mysql-router
+    channel: latest/edge
 
   cinder-solidfire:
-    charm: ../../cinder-solidfire
-    options:
-      san-ip: 10.0.0.5
-      san-login: username
-      san-password: password
+    charm: ../../cinder-solidfire.charm
 
 relations:
   - [ keystone:shared-db, keystone-mysql-router:shared-db ]
