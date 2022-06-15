@@ -1,3 +1,5 @@
+local_overlay_enabled: False
+
 series: focal
 variables:
   openstack-origin: &openstack-origin distro
@@ -19,7 +21,6 @@ machines:
 applications:
   mysql-innodb-cluster:
     charm: ch:mysql-innodb-cluster
-    channel: latest/edge
     num_units: 3
     options:
       source: *openstack-origin
@@ -27,28 +28,28 @@ applications:
       - '0'
       - '1'
       - '2'
+    channel: 8.0/edge
   rabbitmq-server:
     charm: ch:rabbitmq-server
-    channel: latest/edge
     num_units: 1
     options:
       source: *openstack-origin
     to:
       - '3'
+    channel: 3.9/edge
   keystone:
     charm: ch:keystone
-    channel: yoga/edge
     options:
       openstack-origin: *openstack-origin
     num_units: 1
     to:
       - '4'
+    channel: yoga/edge
   keystone-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: 8.0/edge
   cinder:
     charm: ch:cinder
-    channel: yoga/edge
     num_units: 1
     storage:
       block-devices: '40G'
@@ -58,10 +59,11 @@ applications:
       overwrite: "true"
     to:
       - '5'
+    channel: yoga/edge
 
   cinder-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: 8.0/edge
 
   cinder-solidfire:
     charm: ../../cinder-solidfire.charm
