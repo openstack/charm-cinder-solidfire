@@ -10,8 +10,8 @@ tags:
   - file-servers
   - misc
 series:
-  - focal
   - jammy
+  - kinetic
 subordinate: true
 provides:
   storage-backend:

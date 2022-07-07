@@ -1,8 +1,10 @@
 - project:
     templates:
-      - charm-unit-jobs-py38
       - charm-unit-jobs-py310
+      # Does not have working functional tests. Virtual appliance doesn't exist yet.
+      # - charm-zed-functional-jobs
     vars:
       needs_charm_build: true
       charm_build_name: cinder-solidfire
       build_type: charmcraft
+      charmcraft_channel: 2.0/stable

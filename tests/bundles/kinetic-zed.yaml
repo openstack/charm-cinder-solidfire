@@ -1,4 +1,4 @@
-series: focal
+series: kinetic
 variables:
   openstack-origin: &openstack-origin distro
 comment:
@@ -37,7 +37,7 @@ applications:
       - '3'
   keystone:
     charm: ch:keystone
-    channel: yoga/edge
+    channel: latest/edge
     options:
       openstack-origin: *openstack-origin
     num_units: 1
@@ -48,7 +48,7 @@ applications:
     channel: latest/edge
   cinder:
     charm: ch:cinder
-    channel: yoga/edge
+    channel: latest/edge
     num_units: 1
     storage:
       block-devices: '40G'
