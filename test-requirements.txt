@@ -14,3 +14,5 @@ git+https://github.com/openstack-charmers/zaza.git#egg=zaza
 git+https://github.com/openstack-charmers/zaza-openstack-tests.git#egg=zaza.openstack
 pytz    # workaround for 14.04 pip/tox
 pyudev  # for ceph-* charm unit tests (not mocked?)
+ops
+git+https://opendev.org/openstack/charm-ops-openstack#egg=ops_openstack
