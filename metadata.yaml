@@ -12,6 +12,7 @@ tags:
 series:
   - jammy
   - kinetic
+  - lunar
 subordinate: true
 provides:
   storage-backend:

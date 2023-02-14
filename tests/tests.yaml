@@ -4,10 +4,10 @@ tests:
 configure:
   - zaza.openstack.charm_tests.keystone.setup.add_demo_user
 gate_bundles:
-  - jammy-yoga
-dev_bundles:
-  - jammy-yoga
   - jammy-zed
+dev_bundles:
+  - jammy-antelope
   - kinetic-zed
+  - lunar-antelope
 smoke_bundles:
-  - jammy-yoga
+  - jammy-zed
