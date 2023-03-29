@@ -7,7 +7,6 @@ gate_bundles:
   - jammy-zed
 dev_bundles:
   - jammy-antelope
-  - kinetic-zed
   - lunar-antelope
 smoke_bundles:
   - jammy-zed
