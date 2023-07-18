@@ -4,9 +4,10 @@ tests:
 configure:
   - zaza.openstack.charm_tests.keystone.setup.add_demo_user
 gate_bundles:
-  - jammy-zed
-dev_bundles:
   - jammy-antelope
+dev_bundles:
+  - jammy-bobcat
   - lunar-antelope
+  - mantic-bobcat
 smoke_bundles:
-  - jammy-zed
+  - jammy-antelope
