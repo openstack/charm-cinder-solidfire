@@ -1,0 +1,2 @@
+ops
+git+https://opendev.org/openstack/charm-ops-openstack@stable/2023.2#egg=ops_openstack

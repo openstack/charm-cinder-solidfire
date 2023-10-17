@@ -7,7 +7,6 @@ gate_bundles:
   - jammy-antelope
 dev_bundles:
   - jammy-bobcat
-  - lunar-antelope
   - mantic-bobcat
 smoke_bundles:
   - jammy-antelope

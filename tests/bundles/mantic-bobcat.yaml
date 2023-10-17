@@ -19,7 +19,7 @@ machines:
 applications:
   mysql-innodb-cluster:
     charm: ch:mysql-innodb-cluster
-    channel: latest/edge
+    channel: 8.0/edge
     num_units: 3
     options:
       source: *openstack-origin
@@ -29,7 +29,7 @@ applications:
       - '2'
   rabbitmq-server:
     charm: ch:rabbitmq-server
-    channel: latest/edge
+    channel: 3.9/edge
     num_units: 1
     options:
       source: *openstack-origin
@@ -37,7 +37,7 @@ applications:
       - '3'
   keystone:
     charm: ch:keystone
-    channel: latest/edge
+    channel: 2023.2/edge
     options:
       openstack-origin: *openstack-origin
     num_units: 1
@@ -45,10 +45,10 @@ applications:
       - '4'
   keystone-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: 8.0/edge
   cinder:
     charm: ch:cinder
-    channel: latest/edge
+    channel: 2023.2/edge
     num_units: 1
     storage:
       block-devices: '40G'
@@ -61,7 +61,7 @@ applications:
 
   cinder-mysql-router:
     charm: ch:mysql-router
-    channel: latest/edge
+    channel: 8.0/edge
 
   cinder-solidfire:
     charm: ../../cinder-solidfire.charm
