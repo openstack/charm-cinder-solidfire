@@ -2,8 +2,8 @@ name: cinder-solidfire
 summary: Solidfire integration for OpenStack Block Storage
 maintainer: OpenStack Charmers <openstack-charmers@lists.ubuntu.com>
 description: |
- Cinder is the block storage service for the Openstack project.
- This charm provides a Solidfire backend for Cinder.
+  Cinder is the block storage service for the Openstack project.
+  This charm provides a Solidfire backend for Cinder.
 tags:
   - openstack
   - storage
@@ -11,8 +11,6 @@ tags:
   - misc
 series:
   - jammy
-  - lunar
-  - mantic
 subordinate: true
 provides:
   storage-backend:

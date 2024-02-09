@@ -37,7 +37,7 @@ applications:
       - '3'
   keystone:
     charm: ch:keystone
-    channel: latest/edge
+    channel: 2024.1/edge
     options:
       openstack-origin: *openstack-origin
     num_units: 1
@@ -48,7 +48,7 @@ applications:
     channel: latest/edge
   cinder:
     charm: ch:cinder
-    channel: latest/edge
+    channel: 2024.1/edge
     num_units: 1
     storage:
       block-devices: '40G'
