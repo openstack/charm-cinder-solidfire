@@ -1,4 +1,4 @@
-series: lunar
+series: noble
 variables:
   openstack-origin: &openstack-origin distro
 comment:
