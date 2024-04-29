@@ -11,3 +11,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+import sys
+from unittest import mock
+
+# mock out some charmhelpers libraries as they have apt install side effects
+charmhelpers = mock.MagicMock()
+sys.modules['charmhelpers'] = charmhelpers
+sys.modules['charmhelpers.contrib.openstack.context'] = (
+    charmhelpers.contrib.openstack.context)
+sys.modules['charmhelpers.contrib'] = charmhelpers.contrib
+sys.modules['charmhelpers.contrib.openstack'] = charmhelpers.contrib.openstack
+sys.modules['charmhelpers.contrib.openstack.utils'] = (
+    charmhelpers.contrib.openstack.utils)
+sys.modules['charmhelpers.core'] = charmhelpers.core
+sys.modules['charmhelpers.core.hookenv'] = charmhelpers.core.hookenv
+sys.modules['charmhelpers.fetch'] = charmhelpers.fetch
