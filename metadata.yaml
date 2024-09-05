@@ -9,8 +9,6 @@ tags:
   - storage
   - file-servers
   - misc
-series:
-  - jammy
 subordinate: true
 provides:
   storage-backend:
